@@ -58,6 +58,7 @@ Call the widgets anywhere you want like you call/load others
 
 @widget('Modules\DisposableTools\Widgets\SunriseSunset', ['location' => $airport->id])
 @widget('Modules\DisposableTools\Widgets\FlightsMap', ['source' => $hub->id])
+@widget('Modules\DisposableTools\Widgets\ActiveBookings')
 ```
 **Options: ActiveUsers**
 
