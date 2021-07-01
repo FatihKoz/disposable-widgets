@@ -12,7 +12,7 @@ use Lang;
 
 class PersonalStats extends Widget
 {
-  protected $config = ['disp' => null, 'user' => null, 'period' => null, 'type' => 'avglanding'];
+  protected $config = ['disp' => null, 'user' => null, 'period' => null, 'type' => 'avglanding', 'limit' => null];
 
   public function run() {
 
@@ -59,6 +59,12 @@ class PersonalStats extends Widget
       $manualq = $manualq->whereYear('submitted_at', '=', $currtime->year);
       $acarsq = $acarsq->whereYear('submitted_at', '=', $currtime->year);
       $periodtext = $currtime->format('Y');
+    }
+
+    if (is_numeric($this->config['limit']) && $this->config['limit'] > 0) {
+      $manualq = $manualq->orderby('submitted_at', 'desc')->take($this->config['limit']);
+      $acarsq = $acarsq->orderby('submitted_at', 'desc')->take($this->config['limit']);
+      $periodtext = 'Last '.$this->config['limit'].' Pireps';
     }
 
     // Execute Query
