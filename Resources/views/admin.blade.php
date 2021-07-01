@@ -64,6 +64,10 @@
           <th>@@widget('Modules\DisposableTools\Widgets\FlightsMap', ['source' => $hub->id])</th>
           <td>Displays a leaflet map from given flights or user pireps</td>
         </tr>
+        <tr>
+          <th>@@widget('Modules\DisposableTools\Widgets\ActiveBookings')</th>
+          <td>Displays current flight & aircraft bookings done via SimBrief Planning</td>
+        </tr>
       </table>
       <hr>
       <p><b>Optional Theming</b></p>

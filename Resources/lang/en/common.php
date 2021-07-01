@@ -50,5 +50,13 @@ return [
   'flights_map'  => 'Flights Map',
   'personal_map' => 'My Flights / PIREPs Map',
   'citypairs'    => 'CityPairs',
-  'airports'     => 'Airports'
+  'airports'     => 'Airports',
+  // Active Bookings Widget
+  'activeb'      => 'Active Bookings',
+  'flight'       => 'Flight',
+  'orig'         => 'Orig',
+  'dest'         => 'Dest',
+  'pilot'        => 'Pilot',
+  'create'       => 'Created',
+  'expire'       => 'Expires',
 ];

@@ -1,6 +1,10 @@
 ## Disposable Widgets and Tools Module (For PhpVms v7)
 **Update Notes**
 
+01.JUL.21
+* Added new widget to show active aircraft + flight bookings (via SimBrief Planning)
+* Improved German Translation (thanks @GAE074)
+
 18.JUN.21
 * FlightMap Widget will show user's flown city pairs with a different color.
 
