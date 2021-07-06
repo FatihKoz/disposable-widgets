@@ -1,6 +1,9 @@
 ## Disposable Widgets and Tools Module (For PhpVms v7)
 **Update Notes**
 
+06.JUL.21
+* Improved helpers to match vmsAcars updates (Flaps & Speeds being reported)
+
 01.JUL.21
 * Added new widget to show active aircraft + flight bookings (via SimBrief Planning)
 * Improved German Translation (thanks @GAE074)
