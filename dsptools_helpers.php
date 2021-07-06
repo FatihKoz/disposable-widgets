@@ -264,7 +264,7 @@ if (!function_exists('Dispo_Tankering')) {
 // Check Pirep Field Values And Format Them
 // Return formatted string (with html tags)
 if (!function_exists('Dispo_PirepFields')) {
-  function Dispo_PirepFields($field_slug,$field_value)
+  function Dispo_PirepFields($field_slug, $field_value, $aircraft = null)
   {
     $error = null;
     if(is_numeric($field_value)) {
@@ -312,6 +312,14 @@ if (!function_exists('Dispo_PirepFields')) {
         } else {
           $field_value = number_format($field_value,2)." ft".$error;
         }
+      }
+      // TakeOff and Landing Flaps
+      elseif($aircraft && Dispo_Modules('DisposableTech') && strpos($field_slug, '-flaps') !== false) {
+        $field_value = Dispo_Flap($aircraft, $field_value);
+      }
+      // TakeOff and Landing Speeds
+      elseif(strpos($field_slug, '-speed') !== false) {
+        $field_value = $field_value.' kts';
       }
     }
     // Date/Time Values (not displaying full date on purpose)
