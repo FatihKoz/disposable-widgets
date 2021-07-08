@@ -1,6 +1,9 @@
 ## Disposable Widgets and Tools Module (For PhpVms v7)
 **Update Notes**
 
+08.JUL.21
+* Italian Translation (thanks @Fabietto996)
+
 06.JUL.21
 * Improved helpers to match vmsAcars updates (Flaps & Speeds being reported)
 
