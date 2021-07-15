@@ -13,11 +13,14 @@ class DisposableToolsServiceProvider extends ServiceProvider
   public function boot()
   {
     $this->moduleSvc = app(ModuleService::class);
+
     $this->registerLinks();
     $this->registerRoutes();
     $this->registerTranslations();
     $this->registerConfig();
     $this->registerViews();
+
+    $this->loadMigrationsFrom(__DIR__.'/../Database/migrations');
   }
 
   public function register() { }
@@ -29,6 +32,23 @@ class DisposableToolsServiceProvider extends ServiceProvider
 
   protected function registerRoutes()
   {
+
+    /** Frontend Routes **/
+    Route::group([
+      'as'     => 'DisposableTools.',
+      'prefix' => '',
+      'middleware' => ['web'],
+      'namespace'  => 'Modules\DisposableTools\Http\Controllers',
+    ], function () {
+      Route::group([
+        'middleware' => ['auth'],
+      ], function () {
+        // WhazzUp Routes
+        // Route::match(['get', 'post'], 'ivao', 'DisposableWhazzUpController@ivao')->name('ivao');
+        // Route::match(['get', 'post'], 'ivao', 'DisposableWhazzUpController@vatsim')->name('vatsim');
+      });
+    });
+
     /** Routes for the admin **/
     Route::group([
         'as'     => 'DisposableTools.',

@@ -8,4 +8,5 @@ class DisposableToolsController extends Controller
 {
   // Admin Page
   public function admin() { return view('DisposableTools::admin'); }
+
 }
