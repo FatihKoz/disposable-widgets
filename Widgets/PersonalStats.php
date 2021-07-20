@@ -21,6 +21,7 @@ class PersonalStats extends Widget
     $statname = null;
     $currtime = Carbon::now();
     $curryear = $currtime->format('Y');
+
     // Define Quarters Of Current Year
     if($this->config['period'] === 'q1') {
       $quarter_start = $curryear.'-01-01 00:00:01';
@@ -38,7 +39,6 @@ class PersonalStats extends Widget
       $quarter_start = $curryear.'-10-01 00:00:01';
       $quarter_end = $curryear.'-12-31 23:59:59';
     }
-
 
     // Define Main Queries
     $manualq = Pirep::where('user_id', $userid)->where('state', PirepState::ACCEPTED);
