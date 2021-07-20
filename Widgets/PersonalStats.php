@@ -20,6 +20,25 @@ class PersonalStats extends Widget
     $periodtext = null;
     $statname = null;
     $currtime = Carbon::now();
+    $curryear = $currtime->format('Y');
+    // Define Quarters Of Current Year
+    if($this->config['period'] === 'q1') {
+      $quarter_start = $curryear.'-01-01 00:00:01';
+      $quarter_end = $curryear.'-03-31 23:59:59';
+    }
+    elseif($this->config['period'] === 'q2') {
+      $quarter_start = $curryear.'-04-01 00:00:01';
+      $quarter_end = $curryear.'-06-30 23:59:59';
+    }
+    elseif($this->config['period'] === 'q3') {
+      $quarter_start = $curryear.'-07-01 00:00:01';
+      $quarter_end = $curryear.'-09-30 23:59:59';
+    }
+    elseif($this->config['period'] === 'q4') {
+      $quarter_start = $curryear.'-10-01 00:00:01';
+      $quarter_end = $curryear.'-12-31 23:59:59';
+    }
+
 
     // Define Main Queries
     $manualq = Pirep::where('user_id', $userid)->where('state', PirepState::ACCEPTED);
@@ -31,7 +50,12 @@ class PersonalStats extends Widget
       $acarsq = $acarsq->where('submitted_at','>=', $currtime);
       $periodtext = Lang::get('DisposableTools::common.lastndays', ['period' => $this->config['period']]);
     }
-    // Define Month And Year Queries
+    // Define Quarter, Month And Year Queries
+    elseif ($this->config['period'] === 'q1' || $this->config['period'] === 'q2' || $this->config['period'] === 'q3' || $this->config['period'] === 'q4') {
+      $manualq = $manualq->whereBetween('submitted_at', [$quarter_start, $quarter_end]);
+      $acarsq = $acarsq->whereBetween('submitted_at', [$quarter_start, $quarter_end]);
+      $periodtext = $curryear.'/'.strtoupper($this->config['period']);
+    }
     elseif ($this->config['period'] === 'currentm') {
       $manualq = $manualq->whereMonth('submitted_at', '=', $currtime->month);
       $acarsq = $acarsq->whereMonth('submitted_at', '=', $currtime->month);

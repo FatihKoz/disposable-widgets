@@ -7,19 +7,38 @@ use App\Models\Airline;
 use App\Models\Pirep;
 use App\Models\UserField;
 use App\Models\UserFieldValue;
-use Modules\DisposableTools\Models\Disposable_WhazzUp;
+use Carbon\Carbon;
 use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Support\Facades\Log;
+use Modules\DisposableTools\Models\Disposable_WhazzUp;
 
 // WhazzUp Data Retrieval
 class WhazzUp extends Widget
 {
-  protected $config = ['selection' => 'IVAO'];
+  // Define Default Config
+  protected $config = [
+    'selection' => 'IVAO'
+  ];
 
+  // Prepare Guzzle
   public function __construct(GuzzleClient $httpClient)
   {
     $this->httpClient = $httpClient;
   }
+
+  // Get Network Selection
+  public function NetworkSelection()
+  {
+    $selection = $this->config['selection'];
+    if(strpos($selection, 'IVAO') !== false) {
+      $result = 'IVAO';
+    }
+    if(strpos($selection, 'VATSIM') !== false) {
+      $result = 'VATSIM';
+    }
+    return $result;
+  }
+
   // Download and Save/Update WhazzUp Data
   public function DownloadWhazzUp($network_selection = null)
   {
@@ -62,8 +81,10 @@ class WhazzUp extends Widget
       );
     }
 
-    return Disposable_WhazzUp::updateOrCreate(['network' => $network_selection], $whazzup_sections);
+    Disposable_WhazzUp::updateOrCreate(['network' => $network_selection], $whazzup_sections);
+    return;
   }
+
   // Get Network Users
   public function NetworkUsersArray()
   {
@@ -74,6 +95,7 @@ class WhazzUp extends Widget
     $networkusers = $networkusers->pluck('value')->all();
     return $networkusers;
   }
+
   // Get Airline Codes
   public function AirlinesArray()
   {
@@ -81,6 +103,7 @@ class WhazzUp extends Widget
     $airlines = $airlines->pluck('icao')->all();
     return $airlines;
   }
+
   // Find The User
   public function FindUser($networkid = null)
   {
@@ -90,30 +113,34 @@ class WhazzUp extends Widget
       return $user;
     }
   }
+
   // Find User's Active Pirep
   public function FindActivePirep($userid = null)
   {
     if($userid) {
-      $pirep = Pirep::where('user_id', $userid)->where('state', 1)->orderby('updated_at', 'desc')->first();
+      $pirep = Pirep::where('user_id', $userid)->where('state', 0)->orderby('updated_at', 'desc')->first();
       return $pirep;
     }
   }
+
   // Main Widget Code
   public function run()
   {
-    $widget_selection = $this->config['selection'];
+    $widget_selection = $this->NetworkSelection();
 
-    if ($widget_selection == 'VATSIM') {
+    if ($widget_selection === 'VATSIM') {
       $network_selection = 'VATSIM';
-      $refresh_interval = 600;
+      $refresh_interval = 300;
       $user_field = 'cid';
     } else {
       $network_selection = 'IVAO';
-      $refresh_interval = 600;
+      $refresh_interval = 300;
       $user_field = 'userId';
     }
     $error = null;
     $pilots = null;
+    $dltime = null;
+    $widgetdata = null;
 
     $whazzup = Disposable_WhazzUp::where('network', $network_selection)->first();
 
@@ -124,7 +151,7 @@ class WhazzUp extends Widget
     }
 
     if($whazzup) {
-      if(isset($refresh_check)) {
+      if (isset($refresh_check)) {
         $whazzup->refresh();
       }
       $pilots = collect(unserialize($whazzup->pilots));
@@ -133,8 +160,8 @@ class WhazzUp extends Widget
 
       $widgetdata = collect();
       foreach ($pilots as $pilot) {
-        $user = $this->FindUser($pilot->userId);
-        $pirep = $this->FindActivePirep($pilot->userId);
+        $user = $this->FindUser($pilot->$user_field);
+        $pirep = $this->FindActivePirep($user->id);
         $airline_icao = substr($pilot->callsign,0,3);
         $airline = in_array($airline_icao, $this->AirlinesArray());
         $widgetdata[] = array(
@@ -144,7 +171,7 @@ class WhazzUp extends Widget
           'network_id'   => isset($pilot->userId) ? $pilot->userId : $pilot->cid,
           'callsign'     => $pilot->callsign,
           'server_name'  => isset($pilot->serverId) ? $pilot->serverId : $pilot->server,
-          'online_time'  => isset($pilot->time) ? ceil($pilot->time/60): $pilot->logon_time->diffInMinutes(),
+          'online_time'  => isset($pilot->time) ? ceil($pilot->time/60): Carbon::parse($pilot->logon_time)->diffInMinutes(),
           'pirep'        => $pirep,
           'airline'      => $airline,
         );
