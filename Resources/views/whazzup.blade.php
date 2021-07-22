@@ -20,20 +20,22 @@
               <td>{{ $pilot['network_id'] }}</td>
               <td>{{ $pilot['server_name'] }}</td>
               <td class="text-right">
-                @if(!$pilot['airline']) <i class="fas fa-exclamation-circle mr-1 ml-1" title="Airline Not Found !" style="color: darkred;"></i>@endif
-                @if(!$pilot['pirep']) <i class="fas fa-exclamation-triangle mr-1 ml-1" title="Pirep Not Found !" style="color: darkred;"></i>@endif
+                @ability('admin', 'admin-access')
+                  @if(!$pilot['airline']) <i class="fas fa-exclamation-circle mr-1 ml-1" title="Airline Not Found !" style="color: darkred;"></i>@endif
+                  @if(!$pilot['pirep']) <i class="fas fa-exclamation-triangle mr-1 ml-1" title="Pirep Not Found !" style="color: darkred;"></i>@endif
+                @endability
                 {{ Dispo_TimeConvert($pilot['online_time']) }}
               </td>
             </tr>
           @endforeach
         </table>
       @else
-        <span class="text-danger">No {{ $network }} Online Flights Found</span>
+        <span class="text-danger mr-1 ml-1">No {{ $network }} Online Flights Found</span>
       @endif
     </div>
   @elseif(isset($error))
-    <div class="card-body p-0 text-center">
-      <span class="text-danger">{{ $error }}</span>
+    <div class="card-body p-0">
+      <span class="text-danger mr-1 ml-1">{{ $error }}</span>
     </div>
   @endif
   @if(isset($dltime))

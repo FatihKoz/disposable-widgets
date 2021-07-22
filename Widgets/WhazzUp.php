@@ -16,9 +16,7 @@ use Modules\DisposableTools\Models\Disposable_WhazzUp;
 class WhazzUp extends Widget
 {
   // Define Default Config
-  protected $config = [
-    'selection' => 'IVAO'
-  ];
+  protected $config = ['selection' => 'IVAO'];
 
   // Prepare Guzzle
   public function __construct(GuzzleClient $httpClient)
@@ -40,13 +38,11 @@ class WhazzUp extends Widget
   }
 
   // Download and Save/Update WhazzUp Data
-  public function DownloadWhazzUp($network_selection = null)
+  public function DownloadWhazzUp($network_selection = 'IVAO')
   {
     if ($network_selection === 'VATSIM') {
-      $network_selection = 'VATSIM';
       $server_address = 'https://data.vatsim.net/v3/vatsim-data.json';
     } else {
-      $network_selection = 'IVAO';
       $server_address = 'https://api.ivao.aero/v2/tracker/whazzup';
     }
 
@@ -81,17 +77,20 @@ class WhazzUp extends Widget
       );
     }
 
-    Disposable_WhazzUp::updateOrCreate(['network' => $network_selection], $whazzup_sections);
-    return;
+    return Disposable_WhazzUp::updateOrCreate(['network' => $network_selection], $whazzup_sections);
   }
 
   // Get Network Users
   public function NetworkUsersArray()
   {
     $userfield = UserField::where('name', $this->config['selection'])->first();
-    if (!$userfield) { return null; }
+    if (!$userfield) {
+      return null;
+    }
     $networkusers = UserFieldValue::where('user_field_id', $userfield->id)->whereNotNull('value')->get();
-    if (!$networkusers) { return null; }
+    if (!$networkusers) {
+      return null;
+    }
     $networkusers = $networkusers->pluck('value')->all();
     return $networkusers;
   }
@@ -130,11 +129,11 @@ class WhazzUp extends Widget
 
     if ($widget_selection === 'VATSIM') {
       $network_selection = 'VATSIM';
-      $refresh_interval = 300;
+      $refresh_interval = 120;
       $user_field = 'cid';
     } else {
       $network_selection = 'IVAO';
-      $refresh_interval = 300;
+      $refresh_interval = 60;
       $user_field = 'userId';
     }
     $error = null;
