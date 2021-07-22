@@ -60,20 +60,20 @@ class WhazzUp extends Widget
     if ($network_selection === 'VATSIM') {
       $whazzup_sections = array(
         'network'      => $network_selection,
-        'pilots'       => serialize($whazzupdata->pilots),
-        'atcos'        => serialize($whazzupdata->controllers),
-        'servers'      => serialize($whazzupdata->servers),
-        'rawdata'      => serialize($whazzupdata),
+        'pilots'       => json_encode($whazzupdata->pilots),
+        'atcos'        => json_encode($whazzupdata->controllers),
+        'servers'      => json_encode($whazzupdata->servers),
+        'rawdata'      => json_encode($whazzupdata),
       );
     } else {
       $whazzup_sections = array(
         'network'      => $network_selection,
-        'pilots'       => serialize($whazzupdata->clients->pilots),
-        'atcos'        => serialize($whazzupdata->clients->atcs),
-        'observers'    => serialize($whazzupdata->clients->observers),
-        'servers'      => serialize($whazzupdata->servers),
-        'voiceservers' => serialize($whazzupdata->voiceServers),
-        'rawdata'      => serialize($whazzupdata),
+        'pilots'       => json_encode($whazzupdata->clients->pilots),
+        'atcos'        => json_encode($whazzupdata->clients->atcs),
+        'observers'    => json_encode($whazzupdata->clients->observers),
+        'servers'      => json_encode($whazzupdata->servers),
+        'voiceservers' => json_encode($whazzupdata->voiceServers),
+        'rawdata'      => json_encode($whazzupdata),
       );
     }
 
@@ -153,7 +153,7 @@ class WhazzUp extends Widget
       if (isset($refresh_check)) {
         $whazzup->refresh();
       }
-      $pilots = collect(unserialize($whazzup->pilots));
+      $pilots = collect(json_decode($whazzup->pilots));
       $pilots = $pilots->whereIn($user_field, $this->NetworkUsersArray());
       $dltime = isset($whazzup->updated_at) ? $whazzup->updated_at : null;
 
