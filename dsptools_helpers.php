@@ -360,3 +360,25 @@ if(!function_exists('Dispo_In_Array_MD')) {
     return false;
   }
 }
+
+// Check Disposable Module Settings
+// Return mixed, either boolean as true/false or the value as string
+// If the settings is not found, return false
+if (!function_exists('Dispo_Settings')) {
+  function Dispo_Settings($key)
+  {
+    $setting = DB::table('disposable_settings')->select('key', 'value')->where('key', $key)->first();
+
+    if (!$setting) {
+      return false;
+    }
+
+    if($setting->value === 'false') {
+      return false;
+    } elseif ($setting->value === 'true') {
+      return true;
+    } else {
+      return $setting->value;
+    }
+  }
+}
