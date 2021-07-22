@@ -23,7 +23,11 @@
               <td class="text-right">
                 @ability('admin', 'admin-access')
                   @if(!$pilot['airline']) <i class="fas fa-exclamation-circle mr-1 ml-1" title="Airline Not Found !" style="color: darkred;"></i>@endif
-                  @if(!$pilot['pirep']) <i class="fas fa-exclamation-triangle mr-1 ml-1" title="Pirep Not Found !" style="color: darkred;"></i>@endif
+                  @if(!$pilot['pirep'])
+                    <i class="fas fa-clipboard mr-1 ml-1" title="Pirep Not Found !" style="color: darkred;"></i>
+                  @elseif($pilot['pirep'])
+                    <i class="fas fa-clipboard-check mr-1 ml-1" title="{{ $pilot['pirep']->aircraft->icao.' | '.$pilot['pirep']->dpt_airport_id.' > '.$pilot['pirep']->arr_airport_id }}" style="color: darkgreen;"></i>
+                  @endif
                 @endability
                 {{ Dispo_TimeConvert($pilot['online_time']) }}
               </td>
