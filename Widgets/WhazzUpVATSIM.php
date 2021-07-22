@@ -69,6 +69,15 @@ class WhazzUpVATSIM extends Widget
         $user = $this->FindUser($pilot->$user_field);
         $pirep = $this->FindActivePirep($user->id);
         $airline_icao = substr($pilot->callsign,0,3);
+        $flight_plan = $pilot->flight_plan;
+        if ($flight_plan) {
+          $flightplan = $flight_plan->aircraft_short.' | '.$flight_plan->departure.' > '.$flight_plan->arrival;
+          if (isset($flight_plan->alternate)) {
+            $flightplan = $flightplan.' (ALTN: '.$flight_plan->alternate.')';
+          }
+        } else {
+          $flightplan = 'ATC Not Filed Yet !';
+        }
         $airline = in_array($airline_icao, $this->AirlinesArray());
         $widgetdata[] = array(
           'user_id'      => $user->id,
@@ -80,6 +89,7 @@ class WhazzUpVATSIM extends Widget
           'online_time'  => Carbon::parse($pilot->logon_time)->diffInMinutes(),
           'pirep'        => $pirep,
           'airline'      => $airline,
+          'flightplan'   => $flightplan,
         );
       }
     }

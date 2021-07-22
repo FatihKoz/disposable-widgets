@@ -69,6 +69,15 @@ class WhazzUpIVAO extends Widget
         $user = $this->FindUser($pilot->$user_field);
         $pirep = $this->FindActivePirep($user->id);
         $airline_icao = substr($pilot->callsign,0,3);
+        $flight_plan = $pilot->flightPlan;
+        if ($flight_plan) {
+          $flightplan = $flight_plan->aircraftId.' | '.$flight_plan->departureId.' > '.$flight_plan->arrivalId;
+          if (isset($flight_plan->alternativeId)) {
+            $flightplan = $flightplan.' (ALTN: '.$flight_plan->alternativeId.')';
+          }
+        } else {
+          $flightplan = 'ATC Not Filed Yet !';
+        }
         $airline = in_array($airline_icao, $this->AirlinesArray());
         $widgetdata[] = array(
           'user_id'      => $user->id,
@@ -80,6 +89,7 @@ class WhazzUpIVAO extends Widget
           'online_time'  => ceil($pilot->time/60),
           'pirep'        => $pirep,
           'airline'      => $airline,
+          'flightplan'   => $flightplan,
         );
       }
     }
