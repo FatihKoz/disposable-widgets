@@ -45,7 +45,8 @@ class DisposableToolsServiceProvider extends ServiceProvider
       ], function () {
         // WhazzUp Routes
         // Route::match(['get', 'post'], 'ivao', 'DisposableWhazzUpController@ivao')->name('ivao');
-        // Route::match(['get', 'post'], 'ivao', 'DisposableWhazzUpController@vatsim')->name('vatsim');
+        // Route::match(['get', 'post'], 'vatsim', 'DisposableWhazzUpController@vatsim')->name('vatsim');
+        // Route::match(['get', 'post'], 'poscon', 'DisposableWhazzUpController@poscon')->name('poscon');
       });
     });
 
