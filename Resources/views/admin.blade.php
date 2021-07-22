@@ -5,9 +5,9 @@
   <div class="card border-blue-bottom">
     <div class="content">
       <p>This module is designed to provide multiple widgets and some tools for phpVms with basic language support.</p>
-      <p><b>Possible options and usage examples explained in the readme and at phpVms forum with pictures.</b></p>
+      <p><b>Possible options and usage examples explained in the readme and at phpVms forum</b></p>
       <p>&bull; Basic list of the widgets are below;</p>
-      <table class="table medium table-striped text-left" style="width: 96%; margin: 5px;">
+      <table class="table table-striped text-left" style="width: 96%; margin: 5px;">
         <tr>
           <th>@@widget('Modules\DisposableTools\Widgets\ActiveUsers')</th>
           <td>Provides an Active Users list (Requires sessions to be handled by database)</td>
